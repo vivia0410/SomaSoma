@@ -1,12 +1,4 @@
-# HSP 高敏感人群专业测评
 
-基于伊莲·阿伦博士原版 HSP 量表的测评工具
-
-## 功能特点
-- 完整27题专业量表
-- 自动计分系统
-
-<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">

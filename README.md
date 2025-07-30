@@ -6,5 +6,452 @@
 - 完整27题专业量表
 - 自动计分系统
 
-## 使用方式
-网页上完成测试后自动计分
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>高敏感人群(HSP)专业测评 | 原版27题量表</title>
+    <style>
+        body {
+            font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        h1 {
+            color: #5d4037;
+            text-align: center;
+            margin-bottom: 10px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #d7ccc8;
+        }
+        .intro {
+            background-color: #efebe9;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            font-size: 15px;
+        }
+        .question {
+            background-color: white;
+            padding: 18px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            counter-increment: question-counter;
+            position: relative;
+        }
+        .question::before {
+            content: counter(question-counter);
+            background: #8d6e63;
+            color: white;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            display: inline-block;
+            text-align: center;
+            line-height: 25px;
+            margin-right: 10px;
+            font-size: 14px;
+        }
+        .reverse {
+            color: #d32f2f;
+            font-size: 13px;
+            margin-left: 5px;
+        }
+        .options {
+            margin-top: 12px;
+            margin-left: 35px;
+        }
+        label {
+            display: block;
+            margin: 10px 0;
+            cursor: pointer;
+            padding: 8px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
+        }
+        label:hover {
+            background-color: #f5f5f5;
+        }
+        input[type="radio"] {
+            margin-right: 10px;
+        }
+        button {
+            background-color: #6d4c41;
+            color: white;
+            border: none;
+            padding: 14px 25px;
+            font-size: 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            display: block;
+            margin: 30px auto;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #5d4037;
+        }
+        button:disabled {
+            background-color: #bdbdbd;
+            cursor: not-allowed;
+        }
+        #result {
+            display: none;
+            background-color: #e8f5e9;
+            padding: 25px;
+            border-radius: 8px;
+            margin-top: 30px;
+            border-left: 5px solid #4caf50;
+        }
+        .score {
+            font-weight: bold;
+            color: #2e7d32;
+            font-size: 20px;
+            margin: 15px 0;
+        }
+        .interpretation {
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px dashed #a5d6a7;
+        }
+        .required::after {
+            content: " *";
+            color: #d32f2f;
+        }
+        .progress-container {
+            width: 100%;
+            background-color: #e0e0e0;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .progress-bar {
+            height: 10px;
+            background-color: #8d6e63;
+            border-radius: 5px;
+            width: 0%;
+            transition: width 0.5s;
+        }
+    </style>
+</head>
+<body>
+    <h1>高敏感人群(HSP)专业测评</h1>
+    
+    <div class="intro">
+        <p>本测评基于伊莲·阿伦博士开发的<strong>原版HSP量表（27题）</strong>，是目前最权威的高敏感人群评估工具。<br>
+        <strong>评分标准：</strong> 完全符合＝1分｜不符合＝0分（标注<span class="reverse">红色</span>的为反向计分题）</p>
+        <p><small>注意：本测试仅供参考，不能替代专业心理诊断。</small></p>
+    </div>
+
+    <div class="progress-container">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
+    
+    <form id="hspTest">
+        <!-- 正向计分题（14题） -->
+        <div class="question">
+            <p class="required">1. 我容易受到强烈感官刺激的影响（如嘈杂的声音、混乱的场景）</p>
+            <div class="options">
+                <label><input type="radio" name="q1" value="1" required> 完全符合</label>
+                <label><input type="radio" name="q1" value="0" required> 不符合</label>
+            </div>
+        </div>
+        
+        <div class="question">
+            <p class="required">2. 我能觉察到环境中细微的变化</p>
+            <div class="options">
+                <label><input type="radio" name="q2" value="1" required> 完全符合</label>
+                <label><input type="radio" name="q2" value="0" required> 不符合</label>
+            </div>
+        </div>
+        
+        <div class="question">
+            <p class="required">3. 他人的情绪会直接影响我</p>
+            <div class="options">
+                <label><input type="radio" name="q3" value="1" required> 完全符合</label>
+                <label><input type="radio" name="q3" value="0" required> 不符合</label>
+            </div>
+        </div>
+        
+        <div class="question">
+            <p class="required">4. 我对疼痛非常敏感</p>
+            <div class="options">
+                <label><input type="radio" name="q4" value="1" required> 完全符合</label>
+                <label><input type="radio" name="q4" value="0" required> 不符合</label>
+            </div>
+        </div>
+        
+        <div class="question">
+            <p class="required">5. 在忙碌的日子里，我需要躲到床上或黑暗的房间寻求解脱</p>
+            <div class="options">
+                <label><input type="radio" name="q5" value="1" required> 完全符合</label>
+                <label><input type="radio" name="q5" value="0" required> 不符合</label>
+            </div>
+        </div>
+        
+        <div class="question">
+            <p class="required">6. 面对新鲜事物时，我通常表现得非常兴奋<span class="reverse">（反向计分）</span></p>
+            <div class="options">
+                <label><input type="radio" name="q6" value="0" required> 完全符合</label>
+                <label><input type="radio" name="q6" value="1" required> 不符合</label>
+            </div>
+        </div>
+        
+        <div class="question">
+            <p class="required">7. 我常能察觉到别人忽略的细微气味<span class="reverse">（反向计分）</span></p>
+            <div class="options">
+                <label><input type="radio" name="q7" value="0" required> 完全符合</label>
+                <label><input type="radio" name="q7" value="1" required> 不符合</label>
+            </div>
+        </div>
+        
+        <div class="question">
+            <p class="required">8. 喧闹的声音会让我感到不舒服</p>
+            <div class="options">
+                <label><input type="radio" name="q8" value="1" required> 完全符合</label>
+                <label><input type="radio" name="q8" value="0" required> 不符合</label>
+            </div>
+        </div>
+        
+        <div class="question">
+            <p class="required">9. 我很享受看暴力电影或玩暴力游戏<span class="reverse">（反向计分）</span></p>
+            <div class="options">
+                <label><input type="radio" name="q9" value="0" required> 完全符合</label>
+                <label><input type="radio" name="q9" value="1" required> 不符合</label>
+            </div>
+        </div>
+        
+        <div class="question">
+            <p class="required">10. 当周围发生太多事情时，我会变得不愉快</p>
+            <div class="options">
+                <label><input type="radio" name="q10" value="1" required> 完全符合</label>
+                <label><input type="radio" name="q10" value="0" required> 不符合</label>
+            </div>
+        </div>
+        
+        <div class="question">
+            <p class="required">11. 饥饿会强烈影响我的情绪或注意力</p>
+            <div class="options">
+                <label><input type="radio" name="q11" value="1" required> 完全符合</label>
+                <label><input type="radio" name="q11" value="0" required> 不符合</label>
+            </div>
+        </div>
+        
+        <div class="question">
+            <p class="required">12. 生活中的变化会让我兴奋<span class="reverse">（反向计分）</span></p>
+            <div class="options">
+                <label><input type="radio" name="q12" value="0" required> 完全符合</label>
+                <label><input type="radio" name="q12" value="1" required> 不符合</label>
+            </div>
+        </div>
+        
+        <div class="question">
+            <p class="required">13. 我注意到并享受精致或微妙的气味、味道、声音、艺术品</p>
+            <div class="options">
+                <label><input type="radio" name="q13" value="1" required> 完全符合</label>
+                <label><input type="radio" name="q13" value="0" required> 不符合</label>
+            </div>
+        </div>
+        
+        <div class="question">
+            <p class="required">14. 同时处理多项任务对我来说很困难</p>
+            <div class="options">
+                <label><input type="radio" name="q14" value="1" required> 完全符合</label>
+                <label><input type="radio" name="q14" value="0" required> 不符合</label>
+            </div>
+        </div>
+        
+        <div class="question">
+            <p class="required">15. 对我来说，安排好生活以避免令人不安或不知所措的情况很重要<span class="reverse">（反向计分）</span></p>
+            <div class="options">
+                <label><input type="radio" name="q15" value="0" required> 完全符合</label>
+                <label><input type="radio" name="q15" value="1" required> 不符合</label>
+            </div>
+        </div>
+        
+        <div class="question">
+            <p class="required">16. 强烈的刺激（如大声的噪音或混乱的场景）让我感到困扰</p>
+            <div class="options">
+                <label><input type="radio" name="q16" value="1" required> 完全符合</label>
+                <label><input type="radio" name="q16" value="0" required> 不符合</label>
+            </div>
+        </div>
+        
+        <div class="question">
+            <p class="required">17. 当我必须和别人竞争或被别人观察时，我会变得非常紧张或颤抖<span class="reverse">（反向计分）</span></p>
+            <div class="options">
+                <label><input type="radio" name="q17" value="0" required> 完全符合</label>
+                <label><input type="radio" name="q17" value="1" required> 不符合</label>
+            </div>
+        </div>
+        
+        <div class="question">
+            <p class="required">18. 小时候，父母或老师似乎认为我敏感或害羞</p>
+            <div class="options">
+                <label><input type="radio" name="q18" value="1" required> 完全符合</label>
+                <label><input type="radio" name="q18" value="0" required> 不符合</label>
+            </div>
+        </div>
+        
+        <div class="question">
+            <p class="required">19. 当人们试图让我一次做太多事情时，我会感到恼怒<span class="reverse">（反向计分）</span></p>
+            <div class="options">
+                <label><input type="radio" name="q19" value="0" required> 完全符合</label>
+                <label><input type="radio" name="q19" value="1" required> 不符合</label>
+            </div>
+        </div>
+        
+        <div class="question">
+            <p class="required">20. 我努力避免犯错或忘记事情</p>
+            <div class="options">
+                <label><input type="radio" name="q20" value="1" required> 完全符合</label>
+                <label><input type="radio" name="q20" value="0" required> 不符合</label>
+            </div>
+        </div>
+        
+        <div class="question">
+            <p class="required">21. 我刻意避免看暴力电影或电视节目<span class="reverse">（反向计分）</span></p>
+            <div class="options">
+                <label><input type="radio" name="q21" value="0" required> 完全符合</label>
+                <label><input type="radio" name="q21" value="1" required> 不符合</label>
+            </div>
+        </div>
+        
+        <div class="question">
+            <p class="required">22. 当有很多事情围绕着我发生时，我会感到不愉快</p>
+            <div class="options">
+                <label><input type="radio" name="q22" value="1" required> 完全符合</label>
+                <label><input type="radio" name="q22" value="0" required> 不符合</label>
+            </div>
+        </div>
+        
+        <div class="question">
+            <p class="required">23. 饥饿会引起我强烈的反应，扰乱我的注意力或情绪<span class="reverse">（反向计分）</span></p>
+            <div class="options">
+                <label><input type="radio" name="q23" value="0" required> 完全符合</label>
+                <label><input type="radio" name="q23" value="1" required> 不符合</label>
+            </div>
+        </div>
+        
+        <div class="question">
+            <p class="required">24. 我生活中的变化会让我情绪波动</p>
+            <div class="options">
+                <label><input type="radio" name="q24" value="1" required> 完全符合</label>
+                <label><input type="radio" name="q24" value="0" required> 不符合</label>
+            </div>
+        </div>
+        
+        <div class="question">
+            <p class="required">25. 我注意到并喜欢精致的香味、味道、声音和艺术品<span class="reverse">（反向计分）</span></p>
+            <div class="options">
+                <label><input type="radio" name="q25" value="0" required> 完全符合</label>
+                <label><input type="radio" name="q25" value="1" required> 不符合</label>
+            </div>
+        </div>
+        
+        <div class="question">
+            <p class="required">26. 同时有太多事情发生让我感到不愉快<span class="reverse">（反向计分）</span></p>
+            <div class="options">
+                <label><input type="radio" name="q26" value="0" required> 完全符合</label>
+                <label><input type="radio" name="q26" value="1" required> 不符合</label>
+            </div>
+        </div>
+        
+        <div class="question">
+            <p class="required">27. 当我必须快速完成某件事时，我会感到焦虑<span class="reverse">（反向计分）</span></p>
+            <div class="options">
+                <label><input type="radio" name="q27" value="0" required> 完全符合</label>
+                <label><input type="radio" name="q27" value="1" required> 不符合</label>
+            </div>
+        </div>
+        
+        <button type="submit" id="submitBtn" disabled>查看测评结果</button>
+    </form>
+    
+    <div id="result">
+        <h2>您的测评结果</h2>
+        <div class="score">您的得分：<span id="totalScore">0</span>/27</div>
+        <div id="resultText">
+            <!-- 结果文本将通过JavaScript动态插入 -->
+        </div>
+        <div class="interpretation">
+            <p><strong>分数解读：</strong></p>
+            <ul>
+                <li><strong>0-10分</strong>：敏感倾向较低</li>
+                <li><strong>11-19分</strong>：中等敏感（多数人落在此区间）</li>
+                <li><strong>20-27分</strong>：高度敏感（约20%人群属于此类）</li>
+            </ul>
+            <p>注：原版量表研究中，HSP平均得分为14分，非HSP平均得分为9分。</p>
+        </div>
+    </div>
+
+    <script>
+        // 反向计分题编号（共13题）
+        const reverseQuestions = [6, 7, 9, 12, 15, 17, 19, 21, 23, 25, 26, 27];
+        
+        // 检查所有问题是否已回答
+        function checkCompletion() {
+            const allQuestions = document.querySelectorAll('.question');
+            let answered = 0;
+            
+            allQuestions.forEach(question => {
+                const radios = question.querySelectorAll('input[type="radio"]:checked');
+                if (radios.length > 0) answered++;
+            });
+            
+            // 更新进度条
+            const progress = Math.round((answered / 27) * 100);
+            document.getElementById('progressBar').style.width = progress + '%';
+            
+            // 启用/禁用提交按钮
+            document.getElementById('submitBtn').disabled = answered < 27;
+        }
+        
+        // 为所有单选按钮添加事件监听
+        document.querySelectorAll('input[type="radio"]').forEach(radio => {
+            radio.addEventListener('change', checkCompletion);
+        });
+        
+        // 表单提交处理
+        document.getElementById('hspTest').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            let totalScore = 0;
+            
+            // 计算正向计分题
+            for (let i = 1; i <= 27; i++) {
+                if (reverseQuestions.includes(i)) continue;
+                
+                const selected = document.querySelector(`input[name="q${i}"]:checked`);
+                if (selected) totalScore += parseInt(selected.value);
+            }
+            
+            // 计算反向计分题
+            reverseQuestions.forEach(q => {
+                const selected = document.querySelector(`input[name="q${q}"]:checked`);
+                if (selected) totalScore += parseInt(selected.value);
+            });
+            
+            // 显示结果
+            document.getElementById('totalScore').textContent = totalScore;
+            
+            let resultText = '';
+            if (totalScore >= 20) {
+                resultText = `<p>您很可能属于<strong>高敏感人群(HSP)</strong>。您对感官刺激、情绪和环境的细微变化非常敏感，这既是天赋也可能带来挑战。建议您学习HSP专属的自我调节策略。</p>`;
+            } else if (totalScore >= 11) {
+                resultText = `<p>您具有一定的敏感特质，在部分情境中会表现出HSP特征，但整体处于人群平均水平。</p>`;
+            } else {
+                resultText = `<p>您的敏感倾向较低。您通常能有效过滤环境刺激，但在理解高敏感人群时可能需要更多共情。</p>`;
+            }
+            
+            document.getElementById('resultText').innerHTML = resultText;
+            document.getElementById('result').style.display = 'block';
+            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+        });
+    </script>
+</body>
+</html>
